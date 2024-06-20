@@ -1,17 +1,14 @@
+
 import streamlit as st
 import pandas as pd
 import random
 import time
 
 # Función para cargar preguntas desde un archivo CSV
-
-
 def cargar_preguntas(archivo_csv):
     return pd.read_csv(archivo_csv)
 
 # Mostrar resultado con GIF
-
-
 def mostrar_resultado(correcta):
 
     ok_list = ['https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExb20zZTFyYnZ2ZWxzMTRiZWxjOG9qajFxYWM2bjRrYndlZmtjdnIxeiZlcD12MV9naWZzX3NlYXJjaCZjdD1n/tItIlCGySM0ieKKW6b/200.webp',
@@ -51,10 +48,8 @@ def mostrar_resultado(correcta):
     st.session_state.respuesta_seleccionada = None
     st.rerun()
 
-
 # Cargar preguntas
-preguntas = cargar_preguntas(
-    'https://raw.githubusercontent.com/Freegalado/cuestionario_esgrima24/main/preguntas_esgrima.csv')
+preguntas = cargar_preguntas('https://raw.githubusercontent.com/Freegalado/cuestionario_esgrima24/main/preguntas_esgrima.csv')
 num_preguntas = len(preguntas) + 1
 
 # Inicializar estado de la aplicación
@@ -101,8 +96,7 @@ pregunta_actual = st.session_state.pregunta_actual
 if pregunta_actual < num_preguntas:
     row = preguntas.iloc[pregunta_actual]
     st.markdown(
-        f"<h2 style='text-align: center; font-size: 15px; font-weight: bold;'>Pregunta {
-            pregunta_actual+1}: <br/>{row['pregunta']}</h2>",
+        f"<h2 style='text-align: center; font-size: 15px; font-weight: bold;'>Pregunta {pregunta_actual+1}: <br/>{row['pregunta']}</h2>",
         unsafe_allow_html=True
     )
 
@@ -113,7 +107,7 @@ if pregunta_actual < num_preguntas:
     random.shuffle(opciones_mostradas)
 
     # Mostrar opciones de respuesta
-    # seleccionada = st.radio(
+    #seleccionada = st.radio(
     #    "Selecciona la respuesta correcta:",
     #    options=opciones_mostradas,
     #    index=opciones_mostradas.index(st.session_state.respuesta_seleccionada) if st.session_state.respuesta_seleccionada else 0,
@@ -126,11 +120,9 @@ if pregunta_actual < num_preguntas:
     seleccionada = st.radio(
         "Selecciona la respuesta correcta:",
         options=opciones_mostradas,
-        index=opciones_mostradas.index(
-            st.session_state.respuesta_seleccionada) if st.session_state.respuesta_seleccionada else None,
+        index=opciones_mostradas.index(st.session_state.respuesta_seleccionada) if st.session_state.respuesta_seleccionada else None,
         key='respuesta',
-        on_change=lambda: st.session_state.update(
-            {'respuesta_seleccionada': st.session_state.respuesta}),
+        on_change=lambda: st.session_state.update({'respuesta_seleccionada': st.session_state.respuesta}),
         format_func=lambda x: f"**{x}**",
         help="Formato de opciones de respuesta"
     )
@@ -139,8 +131,7 @@ if pregunta_actual < num_preguntas:
         opcion_correcta = opciones_mapeadas[row['respuesta']]
         correcta = st.session_state.respuesta == opcion_correcta
 
-        print(f"Correcta {st.session_state.respuesta_seleccionada == opcion_correcta}: {
-              st.session_state.respuesta_seleccionada} == {opcion_correcta}")
+        print(f"Correcta {st.session_state.respuesta_seleccionada == opcion_correcta}: {st.session_state.respuesta_seleccionada} == {opcion_correcta}")
         mostrar_resultado(correcta)
         st.session_state.respuestas[pregunta_actual] = st.session_state.respuesta_seleccionada
         st.session_state.mostrar_gif = True
@@ -149,28 +140,27 @@ else:
     # Mostrar resultados finales
     puntaje = st.session_state.puntaje
     print(num_preguntas)
-    st.markdown(f"<h2 style='text-align: center; font-size: 50px;'>Has respondido correctamente {
-                puntaje} de {num_preguntas} preguntas.</h2>", unsafe_allow_html=True)
+    st.markdown(f"<h2 style='text-align: center; font-size: 50px;'>Has respondido correctamente {puntaje} de {num_preguntas} preguntas.</h2>", unsafe_allow_html=True)
 
     num_correctas = (puntaje / num_preguntas) * 100
 
-    eft_co, cent_co, last_co = st.columns(3)
+    eft_co, cent_co,last_co = st.columns(3)
     with cent_co:
-        if num_correctas == 100:
-            st.balloons()
-            st.image('https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExdncwMzJjaGJ0cXhnZzc2ZjVuNXc2MWh2NDg1em40ZXU3NW1temFlaCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/yoJC2JaiEMoxIhQhY4/200.webp', width=400)
-        elif (num_correctas >= 90) & (num_correctas <= 99):
-            st.balloons()
-            st.image('https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExNHgxZ2tyM3VzYXdjbWhtemU2c2twYTd3dW1rcXNjOGVxank1NzFseCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/NEvPzZ8bd1V4Y/giphy.webp', width=400)
-        elif (num_correctas >= 70) & (num_correctas <= 89):
-            st.balloons()
-            st.image('https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExaGN1OHdudWZiejBoZDc0Y2R6bW1yODZkZnI1MDhlOXRiOWRlemo4aCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/cWqLabDPjRJKf2kTFC/giphy.webp', width=400)
-        elif (num_correctas >= 50) & (num_correctas <= 69):
-            st.balloons()
-            st.image('https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExeGQ4amcxYXBzdTM2dXVweThqb25maXloc2ZhcXhsNWh4dXBxcG1tdSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/xT0xeD17zCkPu9E0Uw/giphy.webp', width=400)
-        else:
-            st.balloons()
-            st.image('https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExaGljZ3M4bHZ0NWh5ZWZwZm9oeDJ2ODNwNnc0ZGtkazZweHVoZWNlMCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/f72BA6kQXT4uQ/giphy.webp', width=400)
+      if num_correctas == 100:
+          st.balloons()
+          st.image('https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExdncwMzJjaGJ0cXhnZzc2ZjVuNXc2MWh2NDg1em40ZXU3NW1temFlaCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/yoJC2JaiEMoxIhQhY4/200.webp', width=400)
+      elif (num_correctas >= 90) & (num_correctas <= 99):
+          st.balloons()
+          st.image('https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExNHgxZ2tyM3VzYXdjbWhtemU2c2twYTd3dW1rcXNjOGVxank1NzFseCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/NEvPzZ8bd1V4Y/giphy.webp', width=400)
+      elif (num_correctas >= 70) & (num_correctas <= 89):
+          st.balloons()
+          st.image('https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExaGN1OHdudWZiejBoZDc0Y2R6bW1yODZkZnI1MDhlOXRiOWRlemo4aCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/cWqLabDPjRJKf2kTFC/giphy.webp', width=400)
+      elif (num_correctas >= 50) & (num_correctas <= 69):
+          st.balloons()
+          st.image('https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExeGQ4amcxYXBzdTM2dXVweThqb25maXloc2ZhcXhsNWh4dXBxcG1tdSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/xT0xeD17zCkPu9E0Uw/giphy.webp', width=400)
+      else:
+          st.balloons()
+          st.image('https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExaGljZ3M4bHZ0NWh5ZWZwZm9oeDJ2ODNwNnc0ZGtkazZweHVoZWNlMCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/f72BA6kQXT4uQ/giphy.webp', width=400)
 
     # Botón para reiniciar el cuestionario
     if st.button('Reiniciar'):
