@@ -106,17 +106,6 @@ if pregunta_actual < num_preguntas:
     opciones_mostradas = [opciones_mapeadas[opcion] for opcion in opciones]
     random.shuffle(opciones_mostradas)
 
-    # Mostrar opciones de respuesta
-    #seleccionada = st.radio(
-    #    "Selecciona la respuesta correcta:",
-    #    options=opciones_mostradas,
-    #    index=opciones_mostradas.index(st.session_state.respuesta_seleccionada) if st.session_state.respuesta_seleccionada else 0,
-    #    key='respuesta',
-    #    on_change=lambda: st.session_state.update({'respuesta_seleccionada': st.session_state.respuesta}),
-    #    format_func=lambda x: f"**{x}**",
-    #    help="Formato de opciones de respuesta"
-    #
-
     seleccionada = st.radio(
         "Selecciona la respuesta correcta:",
         options=opciones_mostradas,
@@ -130,8 +119,6 @@ if pregunta_actual < num_preguntas:
     if st.button('Enviar'):
         opcion_correcta = opciones_mapeadas[row['respuesta']]
         correcta = st.session_state.respuesta == opcion_correcta
-
-        print(f"Correcta {st.session_state.respuesta_seleccionada == opcion_correcta}: {st.session_state.respuesta_seleccionada} == {opcion_correcta}")
         mostrar_resultado(correcta)
         st.session_state.respuestas[pregunta_actual] = st.session_state.respuesta_seleccionada
         st.session_state.mostrar_gif = True
@@ -139,7 +126,6 @@ if pregunta_actual < num_preguntas:
 else:
     # Mostrar resultados finales
     puntaje = st.session_state.puntaje
-    print(num_preguntas)
     st.markdown(f"<h2 style='text-align: center; font-size: 50px;'>Has respondido correctamente {puntaje} de {num_preguntas} preguntas.</h2>", unsafe_allow_html=True)
 
     num_correctas = (puntaje / num_preguntas) * 100
